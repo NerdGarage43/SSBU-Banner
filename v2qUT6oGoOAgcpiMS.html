@@ -1,0 +1,592 @@
+<html><head><base href="https://raw.githubusercontent.com/css/"><style>
+  @font-face {
+    font-family: 'CustomFont';
+    src: url('Font.ttf') format('truetype');
+  }
+
+  body {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+    color: white;
+    font-family: 'CustomFont', 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 20%, rgba(74, 144, 226, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(46, 204, 113, 0.1) 0%, transparent 50%);
+    z-index: -1;
+    animation: backgroundPulse 10s ease-in-out infinite;
+  }
+
+  @keyframes backgroundPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  .stage-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 30px; 
+    width: 90vw;
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 30px; 
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .stage {
+    aspect-ratio: 16/9;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    min-height: 160px;
+  }
+
+  .stage:hover {
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 0 10px 30px rgba(74, 144, 226, 0.5);
+  }
+
+  .stage.banned {
+    filter: grayscale(100%) sepia(100%) saturate(300%) brightness(70%) hue-rotate(300deg);
+    opacity: 0.7;
+    border-color: #ff0000;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+    pointer-events: none;
+    transform: scale(0.95);
+    transition: none;
+  }
+
+  .stage.banned:hover {
+    transform: scale(0.95);
+    border-color: #ff0000; 
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+    transition: none;
+  }
+
+  .stage.banned::after {
+    content: "❌";
+    position: absolute;
+    font-size: 48px;
+    color: #ff0000;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    opacity: 1;
+    transform: scale(1);
+    transition: none;
+  }
+
+  .stage.banned:hover::after {
+    opacity: 1;
+    transform: scale(1);
+    transition: none;
+  }
+
+  .stage-name {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    margin-bottom: 10px;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(0);
+  }
+
+  .stage:hover .stage-name {
+    transform: translateY(-5px);
+  }
+
+  .turn-indicator {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #4a90e2;
+    text-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
+    background: linear-gradient(145deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
+    padding: 15px 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(74, 144, 226, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+  }
+
+  .controls {
+    margin: 20px 0;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    background: linear-gradient(145deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(74, 144, 226, 0.3);
+  }
+
+  select {
+    background: linear-gradient(145deg, rgba(74, 144, 226, 0.2), rgba(74, 144, 226, 0.4));
+    color: white;
+    border: 2px solid rgba(74, 144, 226, 0.5);
+    padding: 12px 40px 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='white'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-width: 200px;
+  }
+
+  select:hover {
+    background-color: rgba(74, 144, 226, 0.5);
+    border-color: #4a90e2;
+    transform: translateY(-2px);
+  }
+
+  select:focus {
+    outline: none;
+    box-shadow: 0 0 15px rgba(74, 144, 226, 0.7);
+  }
+
+  button {
+    background: linear-gradient(145deg, #4a90e2, #357abd);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+    min-width: 150px;
+  }
+
+  button:hover {
+    background: linear-gradient(145deg, #357abd, #2868a9);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .particles, .particle {
+    display: none;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      border-color: #4a90e2;
+    }
+    50% {
+      transform: scale(1.05);
+      border-color: #6ab0ff;
+    }
+    100% {
+      transform: scale(1);
+      border-color: #4a90e2;
+    }
+  }
+
+  .selected-stage-message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #4a90e2;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: 2px solid #4a90e2;
+    box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+  }
+  
+  .selected-stage-text {
+    display: none;
+  }
+
+  .stage.selected {
+    display: none;
+  }
+  
+  @keyframes banAnimation {
+    0% {
+      transform: scale(1);
+      filter: none;
+    }
+    50% {
+      transform: scale(0.9) rotate(-3deg);
+    }
+    100% {
+      transform: scale(0.95);
+      filter: grayscale(100%) sepia(100%) saturate(300%) brightness(70%) hue-rotate(300deg);
+    }
+  }
+
+  .stage-preview-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .stage-preview {
+    width: 80vw;
+    height: 80vh;
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+    box-shadow: 0 0 50px rgba(74, 144, 226, 0.5);
+    margin-bottom: 20px;
+  }
+
+  .stage-preview-text {
+    font-size: 36px;
+    color: white;
+    text-shadow: 0 0 20px rgba(74, 144, 226, 0.8);
+    margin: 20px 0;
+  }
+
+  .stage-preview-button {
+    padding: 15px 40px;
+    font-size: 24px;
+    background: linear-gradient(145deg, #4a90e2, #357abd);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .stage-preview-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(74, 144, 226, 0.5);
+  }
+
+  @keyframes resetAnimation {
+    0% {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .stage.resetting {
+    animation: resetAnimation 0.5s ease forwards;
+  }
+
+  @media (max-width: 768px) {
+    .stage {
+      min-height: 120px;
+    }
+    .stage-grid {
+      gap: 20px; 
+      padding: 20px; 
+    }
+  }
+
+  @media (max-width: 480px) {
+    .stage {
+      min-height: 100px;
+    }
+    .stage-grid {
+      gap: 15px; 
+      padding: 15px; 
+    }
+  }
+</style>
+
+</head><body>
+<div class="turn-indicator">Home Team&apos;s Turn to Ban</div>
+
+<div class="stage-grid">
+  <div class="stage" data-stage="Battlefield" style="background-image: url(&apos;Battlefield.svg&apos;)">
+    <div class="stage-name">Battlefield</div>
+  </div>
+  <div class="stage" data-stage="Kalos Pokemon League" style="background-image: url(&apos;Kalos Poke League.svg&apos;)">
+    <div class="stage-name">Kalos Pokemon League</div>
+  </div>
+  <div class="stage" data-stage="Pokemon Stadium 2" style="background-image: url(&apos;Poke Stadium 2.svg&apos;)">
+    <div class="stage-name">Pokemon Stadium 2</div>
+  </div>
+  <div class="stage" data-stage="Town &amp; City" style="background-image: url(&apos;Town &amp; City.svg&apos;)">
+    <div class="stage-name">Town &amp; City</div>
+  </div>
+  <div class="stage" data-stage="Smashville" style="background-image: url(&apos;Smashvile.svg&apos;)">
+    <div class="stage-name">Smashville</div>
+  </div>
+  <div class="stage" data-stage="Yoshi&apos;s Island" style="background-image: url(&apos;Yoshis Island.svg&apos;)">
+    <div class="stage-name">Yoshi&apos;s Island</div>
+  </div>
+  <div class="stage" data-stage="Final Destination" style="background-image: url(&apos;Final Destination.svg&apos;)">
+    <div class="stage-name">Final Destination</div>
+  </div>
+  <div class="stage" data-stage="Lylat Cruise" style="background-image: url(&apos;Lylat Cruise.svg&apos;)">
+    <div class="stage-name">Lylat Cruise</div>
+  </div>
+  <div class="stage" data-stage="Unova Pokemon League" style="background-image: url(&apos;Unova Poke League.svg&apos;)">
+    <div class="stage-name">Unova Pokemon League</div>
+  </div>
+  <div class="stage" data-stage="Yoshi&apos;s Story" style="background-image: url(&apos;Yoshis Story.svg&apos;)">
+    <div class="stage-name">Yoshi&apos;s Story</div>
+  </div>
+</div>
+
+<div class="controls">
+  <select id="banStyleSelect" onchange="changeBanStyle(this.value)">
+    <option value="gameOne">Game One</option>
+    <option value="casual">Casual</option>
+    <option value="proceeding">Proceeding Game</option>
+  </select>
+  <button onclick="resetBans()">Reset Bans</button>
+</div>
+
+<script>const stages = document.querySelectorAll('.stage');
+const turnIndicator = document.querySelector('.turn-indicator');
+let currentPlayer = 'home';
+let currentBanStyle = 'gameOne';
+let bansRemaining = {};
+let banSequence = [];
+let currentBanIndex = 0;
+const banStyles = {
+  gameOne: {
+    sequence: [{
+      team: 'home',
+      bans: 1
+    }, {
+      team: 'away',
+      bans: 2
+    }, {
+      team: 'home',
+      bans: 2
+    }, {
+      team: 'away',
+      bans: 2
+    }],
+    pickingTeam: 'home',
+    remainingStages: 3,
+    initialBans: 1,
+    labels: {
+      player1: 'Home Team',
+      player2: 'Away Team'
+    }
+  },
+  casual: {
+    sequence: Array(8).fill().map((_, i) => ({
+      team: i % 2 === 0 ? 'home' : 'away',
+      bans: 1
+    })),
+    pickingTeam: 'away',
+    remainingStages: 2,
+    initialBans: 1,
+    labels: {
+      player1: 'Player One',
+      player2: 'Player Two'
+    }
+  },
+  proceeding: {
+    sequence: [{
+      team: 'winner',
+      bans: 3
+    }],
+    pickingTeam: 'loser',
+    remainingStages: 7,
+    initialBans: 3,
+    labels: {
+      player1: 'Winning Team',
+      player2: 'Losing Team'
+    }
+  }
+};
+function initializeBanStyle(style) {
+  currentBanStyle = style;
+  currentBanIndex = 0;
+  banSequence = banStyles[style].sequence;
+  banSequence[0].bans = banStyles[style].initialBans;
+  currentPlayer = banSequence[0].team;
+  updateTurnIndicator();
+}
+function updateTurnIndicator() {
+  const currentBan = banSequence[currentBanIndex];
+  if (!currentBan) {
+    const remainingCount = Array.from(stages).filter(stage => !stage.classList.contains('banned')).length;
+    if (remainingCount <= banStyles[currentBanStyle].remainingStages) {
+      const pickingTeam = banStyles[currentBanStyle].pickingTeam;
+      const label = pickingTeam === 'home' ? banStyles[currentBanStyle].labels.player1 : pickingTeam === 'away' ? banStyles[currentBanStyle].labels.player2 : pickingTeam === 'winner' ? 'Winning Team' : 'Losing Team';
+      turnIndicator.textContent = `${label} - Choose Your Stage!`;
+      highlightRemainingStages();
+      return;
+    }
+  }
+  const label = currentPlayer === 'home' ? banStyles[currentBanStyle].labels.player1 : currentPlayer === 'away' ? banStyles[currentBanStyle].labels.player2 : currentPlayer === 'winner' ? 'Winning Team' : 'Losing Team';
+  const bansText = currentBan ? ` (Ban - ${currentBan.bans} Stages)` : '';
+  turnIndicator.textContent = `${label}'s Turn to Ban${bansText}`;
+}
+stages.forEach(stage => {
+  stage.addEventListener('click', () => {
+    if (stage.classList.contains('banned')) return;
+    const currentBan = banSequence[currentBanIndex];
+    if (!currentBan) {
+      const remainingCount = Array.from(stages).filter(stage => !stage.classList.contains('banned')).length;
+      if (remainingCount <= banStyles[currentBanStyle].remainingStages) {
+        stages.forEach(otherStage => {
+          if (otherStage !== stage) {
+            otherStage.classList.add('banned');
+          }
+        });
+        showStagePreview(stage.dataset.stage, stage.style.backgroundImage.slice(5, -2));
+        return;
+      }
+    }
+    stage.classList.add('banned');
+    stage.style.animation = 'banAnimation 0.5s ease forwards';
+    if (currentBan) {
+      currentBan.bans--;
+      if (currentBan.bans === 0) {
+        currentBanIndex++;
+        if (currentBanIndex < banSequence.length) {
+          currentPlayer = banSequence[currentBanIndex].team;
+        }
+      }
+    }
+    updateTurnIndicator();
+  });
+});
+function highlightRemainingStages() {
+  stages.forEach(stage => {
+    if (!stage.classList.contains('banned')) {
+      stage.style.borderColor = '#4a90e2';
+      if (!stage.classList.contains('banned')) {
+        stage.style.animation = 'pulse 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite';
+      }
+    }
+  });
+}
+function changeBanStyle(style) {
+  document.getElementById('banStyleSelect').value = style;
+  resetBans();
+  initializeBanStyle(style);
+}
+function resetBans() {
+  const currentStyle = document.getElementById('banStyleSelect').value;
+  stages.forEach(stage => {
+    stage.classList.remove('banned');
+    stage.classList.add('resetting');
+    stage.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+    stage.style.animation = '';
+    stage.style.opacity = '1';
+    stage.style.transform = 'none';
+    stage.style.transition = 'all 0.5s ease';
+    stage.addEventListener('animationend', () => {
+      stage.classList.remove('resetting');
+    }, {
+      once: true
+    });
+  });
+  const messageEl = document.querySelector('.selected-stage-message');
+  if (messageEl) {
+    messageEl.style.opacity = '0';
+    setTimeout(() => messageEl.remove(), 500);
+  }
+  initializeBanStyle(currentStyle);
+}
+function showStagePreview(stageName, backgroundUrl) {
+  const overlay = document.createElement('div');
+  overlay.className = 'stage-preview-overlay';
+  const preview = document.createElement('div');
+  preview.className = 'stage-preview';
+  preview.style.backgroundImage = `url('${backgroundUrl}')`;
+  const text = document.createElement('div');
+  text.className = 'stage-preview-text';
+  text.textContent = stageName;
+  const button = document.createElement('button');
+  button.className = 'stage-preview-button';
+  button.textContent = 'Okay';
+  overlay.appendChild(preview);
+  overlay.appendChild(text);
+  overlay.appendChild(button);
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => {
+    overlay.style.opacity = '1';
+  });
+  button.addEventListener('click', () => {
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+      overlay.remove();
+      resetBans();
+    }, 300);
+  });
+}
+window.addEventListener('load', () => {
+  updateStageGrid();
+});
+function updateStageGrid() {
+  const grid = document.querySelector('.stage-grid');
+  const width = window.innerWidth;
+  if (width < 768) {
+    grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+  } else if (width < 1200) {
+    grid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+  } else if (width < 1800) {
+    grid.style.gridTemplateColumns = 'repeat(4, 1fr)';
+  } else {
+    grid.style.gridTemplateColumns = 'repeat(5, 1fr)';
+  }
+}
+window.addEventListener('resize', updateStageGrid);
+initializeBanStyle('gameOne');</script>
+
+</body></html>
